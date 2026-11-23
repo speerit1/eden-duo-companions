@@ -1,0 +1,49 @@
+name: Publish P3P Thor v1.8.10 community build
+
+on:
+  push:
+    branches:
+      - p3p-v1.8.10-release
+    paths:
+      - ".github/workflows/p3p-v1810-community-release.yml"
+      - "community-releases/p3p-v1.8.10/**"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify byte-identical original archive
+        shell: bash
+        run: |
+          printf '%s  %s\n' \
+            '70faf618f1fd4777c78d5204688b5427e80eeb0e57c2d16ec30e9b02ed3e4513' \
+            'community-releases/p3p-v1.8.10/0100DCD01525A000-Persona3PortableDS-v1.8.10-FINAL.dsmod.zip' \
+          | sha256sum --check --status
+          echo 'Original v1.8.10 archive SHA-256 verified'
+      - name: Verify archive manifest and references
+        run: |
+          python3 community-releases/p3p-v1.8.10/v1810_reference.py \
+            --archive community-releases/p3p-v1.8.10/0100DCD01525A000-Persona3PortableDS-v1.8.10-FINAL.dsmod.zip
+      - name: Create or refresh unofficial community release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          TAG='p3p-thor-v1.8.10-community'
+          ASSET='community-releases/p3p-v1.8.10/0100DCD01525A000-Persona3PortableDS-v1.8.10-FINAL.dsmod.zip'
+          NOTES='community-releases/p3p-v1.8.10/RELEASE_NOTES.md'
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            gh release upload "$TAG" "$ASSET" --clobber
+            gh release edit "$TAG" --notes-file "$NOTES" --title 'Persona 3 Portable — AYN Thor v1.8.10 FINAL (unofficial)'
+          else
+            gh release create "$TAG" "$ASSET" \
+              --target "$GITHUB_SHA" \
+              --title 'Persona 3 Portable — AYN Thor v1.8.10 FINAL (unofficial)' \
+              --notes-file "$NOTES" \
+              --prerelease --latest=false
+          fi
