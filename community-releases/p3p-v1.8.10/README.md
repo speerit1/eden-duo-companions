@@ -13,7 +13,7 @@
 
 **Install:** back up any existing P3P companion; install this archive through Eden Duo's normal dual-screen mod process. Keep the original archive for rollback. Test Battle and game-state interactions on your exact emulator version.
 
-**Documentation:** [release notes](RELEASE_NOTES.md) · [asset provenance and upstream integration](PROVENANCE_AND_UPSTREAM.md) · [asset inventory](ASSET_PROVENANCE.csv) · [manifest reference extractor](v1810_reference.py)
+**Documentation:** [release notes](RELEASE_NOTES.md) · [asset provenance and upstream integration](PROVENANCE_AND_UPSTREAM.md) · [asset inventory](ASSET_PROVENANCE.csv) · [manifest reference extractor](v1810_reference.py) · [procedural art generator](generate_art_v18_partial.py) · [asset hash verifier](verify_generated_31.py)
 
 The exact final manifest is recorded here as a verified compressed text fixture for contributors. Run:
 
@@ -24,3 +24,5 @@ python3 community-releases/p3p-v1.8.10/v1810_reference.py --output /tmp/p3p-v1.8
 **Credits:** original base companion by jschroeder1; Eden Duo Companions project maintained by igawa6; Thor redesign created and tested by community contributor with AI assistance from Claude (Anthropic) and ChatGPT (OpenAI).
 
 **Licensing and limitations:** upstream source is GPL-3.0-or-later; image generation provenance is partly reconstructed, documented in the included inventory. The original module sources are available in the parent repo; exact binary/source reproducibility is still to be verified. This public release branch is **not a proposed upstream source change** and is intentionally separate from [draft PR #31](https://github.com/igawa6/eden-duo-companions/pull/31).
+
+**Source recovery update:** The included procedural generator and verifier have reproduced **31 of the 62 bundled PNGs byte-for-byte**, confirmed against original v1.8.10 SHA-256 hashes using the locally installed Inter font. Generate and verify with `python3 generate_art_v18_partial.py --output /tmp/p3p-art` followed by `python3 verify_generated_31.py /tmp/p3p-art`. The other 31 assets still need their generation sources reconstructed or appropriately licensed before the upstream source PR can be considered complete.
