@@ -36,5 +36,5 @@ This is an unofficial fan modification and is not affiliated with ATLUS, SEGA, E
 ## Known limitations
 
 - **Battle** has not been exhaustively tested on real hardware in all enemy configurations.
-- Some imagery is generated from earlier design stages, for which the original generation scripts have not all been recovered.
+- A generator now exactly reproduces 31 of the 62 bundled PNGs. The remaining 31 come from earlier or later design revisions whose exact source has not yet been recovered.
 - Do not submit this whole binary archive into the upstream PR: that PR expects reproducible, asset-free source.
